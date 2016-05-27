@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AudioTest</string>
+    <string name="btn_start_record">start record</string>
+    <string name="btn_stop_record">stop record</string>
+    <string name="btn_start_playback">start playback</string>
+    <string name="btn_stop_playback">stop playback</string>
+</resources>
