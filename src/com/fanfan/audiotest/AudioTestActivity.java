@@ -32,6 +32,7 @@ public class AudioTestActivity extends Activity
 
     private Button         mBtnStartStopRec;
     private Button         mBtnStartStopPlay;
+    private Button         mBtnRecStartNoise;
     private WaveformView   mWaveformView;
     private Random         mRandom = new Random();
 
@@ -41,12 +42,14 @@ public class AudioTestActivity extends Activity
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+
         mBtnStartStopRec  = (Button)findViewById(R.id.btn_startstop_record  );
         mBtnStartStopPlay = (Button)findViewById(R.id.btn_startstop_playback);
+        mBtnRecStartNoise = (Button)findViewById(R.id.btn_test_record_start_noise);
         mWaveformView     = (WaveformView)findViewById(R.id.waveform_view   );
         mBtnStartStopRec .setOnClickListener(mOnClickListener);
         mBtnStartStopPlay.setOnClickListener(mOnClickListener);
+        mBtnRecStartNoise.setOnClickListener(mOnClickListener);
 
         mMinBufSizeR = AudioRecord.getMinBufferSize(SAMPLE_RATE_RECORD,
                             AudioFormat.CHANNEL_CONFIGURATION_MONO,
@@ -106,6 +109,14 @@ public class AudioTestActivity extends Activity
                     mBtnStartStopPlay.setText(R.string.btn_start_playback);
                 }
                 break;
+            case R.id.btn_test_record_start_noise:
+                if (mRecThread == null) {
+                    mRecThread = new RecordThread();
+                    mRecThread.recordStartNoise();
+                    try { mRecThread.join(); } catch (Exception e) {}
+                    mRecThread = null;
+                }
+                break;
             }
         }
     };
@@ -123,7 +134,8 @@ public class AudioTestActivity extends Activity
 
     class RecordThread extends Thread
     {
-        private boolean isRecording = false;
+        private boolean isRecording    = false;
+        private boolean bRecStartNoise = false;
 
         @Override
         public void run() {
@@ -139,9 +151,13 @@ public class AudioTestActivity extends Activity
                     Log.d(TAG, "read record data offset = " + offset);
                 }
                 mWaveformView.setAudioData(buf);
-                Message msg = mHandler.obtainMessage();  
-                msg.what = MSG_UPDATE_WAVEFORM_VIEW;  
-                mHandler.sendMessage(msg);  
+                Message msg = mHandler.obtainMessage();
+                msg.what = MSG_UPDATE_WAVEFORM_VIEW;
+                mHandler.sendMessage(msg);
+                if (bRecStartNoise) {
+                    bRecStartNoise = false;
+                    break;
+                }
             }
 
             mRecorder.stop();
@@ -149,6 +165,11 @@ public class AudioTestActivity extends Activity
 
         public void stopRecord() {
             isRecording = false;
+        }
+
+        public void recordStartNoise() {
+            bRecStartNoise = true;
+            start();
         }
     }
 

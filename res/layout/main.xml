@@ -19,6 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="88dp"
             android:text="@string/btn_start_playback" />
+        <Button
+            android:id="@+id/btn_test_record_start_noise"
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:text="@string/btn_test_record_start_noise" />
     </LinearLayout>
 
     <FrameLayout

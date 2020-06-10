@@ -27,7 +27,6 @@ public class WaveformView extends View {
         Path  path  = new Path ();
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.rgb(0, 255, 0));
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(1f);
 
@@ -35,10 +34,16 @@ public class WaveformView extends View {
         int h = canvas.getHeight();
         int n = mAudioData.length; // mAudioData.length; // 512;
 
+        paint.setColor(Color.rgb(0, 0, 0));
+        path.moveTo(0, h / 2);
+        path.lineTo(w, h / 2);
+        canvas.drawPath(path, paint);
+
         int delta = n / w > 1 ? n / w : 1;
         int px, py, i;
         px = 0;
         py = (int)(h * (mAudioData[0] + 0x7fff) / 0x10000);
+        paint.setColor(Color.rgb(0, 255, 0));
         path.moveTo(px, py);
         for (i=delta; i<n; i+=delta) {
             px = w * i / n;

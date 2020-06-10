@@ -5,4 +5,5 @@
     <string name="btn_stop_record">stop record</string>
     <string name="btn_start_playback">start playback</string>
     <string name="btn_stop_playback">stop playback</string>
+    <string name="btn_test_record_start_noise">test record start noise</string>
 </resources>
